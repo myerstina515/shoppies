@@ -1,0 +1,33 @@
+body{
+  background-color: grey;
+}
+
+.container{
+  display: grid;
+  grid-template-columns: 60% 40%;
+  // display: flexbox;
+  // flex-wrap: wrap;
+}
+#moviesList{
+  display: grid;
+  grid-template-columns: 45% 45%;
+}
+#movieImage{
+  margin: 10px auto 10px auto;
+  // width: 75%;
+  // height: 75%;
+
+}
+#poster{
+  height: 75%;
+  width: 75%;
+  margin: 10px auto 10px auto;
+}
+#favoriteImage{
+  height: 40%;
+  width: 40%;
+  margin: 10px auto 10px auto;
+}
+#header{
+  margin-bottom: 10px;
+}
