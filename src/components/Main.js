@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './Main.scss';
 import { makeStyles, fade, Card, Typography, CardMedia, Button, InputBase } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import Camera from '../assets/camera.png';
+
 
 const Main = () => {
   const classes = useStyles();
   const [search, setSearch] = useState('');
   const [movies, setMovies] = useState([]);
   const [nominates, setnominates] = useState([]);
+  const [disable, setDisable] = useState(false);
 
   const getMovies = async (search) => {
     const url = `http://www.omdbapi.com/?s=${search}&apikey=f87015ef`;
@@ -19,11 +22,19 @@ const Main = () => {
     }
   }
   const handleClick = (chosenMovie) => {
-    if (nominates.length < 5) {
-      let nominatesList = [...nominates, chosenMovie]
+    console.log(chosenMovie)
+    if (nominates.length === 4) {
+      setDisable(true);
+      let nominatesList = [...nominates, chosenMovie];
       setnominates(nominatesList);
-      // saveToLocalStorage(nominatesList);
     }
+    else if (nominates.length < 5) {
+      let nominatesList = [...nominates, chosenMovie];
+      setnominates(nominatesList);
+
+      // saveToLocalStorage(nominatesList);
+    } 
+    
   }
   const handleRemove = (nominateOne) => {
     const newnominatesList = nominates.filter(
@@ -32,6 +43,7 @@ const Main = () => {
 
     setnominates(newnominatesList);
     // saveToLocalStorage(newnominatesList);
+    setDisable(false);
     console.log(nominates);
   };
 
@@ -54,6 +66,14 @@ const Main = () => {
   // let nominatesArray = Array.isArray(nominates);
   // console.log(Array.isArray(nominates));
   // console.log(Array.isArray(movies));
+
+
+  //TODO: clear search
+  //TODO: disable "add" button once added to nominations (if movie.ID === imdb.ID, have button be disabled)
+  //TODO: show banner when nominations.length === 5
+  //TODO: Results for... search info
+  //TODO: Local storage
+
   return (
     <div id="main">
       <div className={classes.search}>
@@ -71,57 +91,76 @@ const Main = () => {
         />
       </div>
 
-      { (movies.length === 0) ? 
-      <Card id="welcomeCard">
-        <h1>Welcome to the Shoppies!</h1>
-        <p>Nominate your favorite movies, and they could win the Shoppie Award!</p>
-        <p>To get started, search for the title of the movie you want to nominate above!</p>
-        <p><em>A maximum of 5 movies can be nominated</em></p>
-      </Card>
-      :
-      <div class='container'>
-        { (movies.length > 0) ?
-        <div id="labels">Movies
+      { (movies.length === 0) ?
+        <Card id="welcomeCard">
+          <h1>Welcome to the Shoppies!</h1>
+          <p>Nominate your favorite movies, and they could win the Shoppie Award!</p>
+          <p>To get started, search for the title of the movie you want to nominate above!</p>
+          <p><em>A maximum of 5 movies can be nominated</em></p>
+        </Card>
+        :
+        <div class='container'>
+          {(movies.length > 0) ?
+            <div id="labels">Movies
           <div id='moviesList'>
-            {movies.map((chosenMovie, idx) => (
-              <Card id='movieImage' key={idx}>
-                <CardMedia
-                  component="img"
-                  id='poster'
-                  height='600'
-                  image={chosenMovie.Poster}
-                  alt="movie" />
-                <Typography id="title">{chosenMovie.Title}({chosenMovie.Year})</Typography>
-                <Button id="button" size="small" color="dark" onClick={(() => handleClick(chosenMovie))}>
-                  Add to nominates</Button>
-              </Card>
+                {movies.map((chosenMovie, idx) => (
+                  <Card id='movieImage' key={idx}>
+                    { (chosenMovie.Poster === 'N/A') ?
+                      <CardMedia
+                        component="img"
+                        id='poster'
+                        height='600'
+                        image={Camera}
+                        alt="movie" />
+                      :
+                      <CardMedia
+                        component="img"
+                        id='poster'
+                        height='600'
+                        image={chosenMovie.Poster}
+                        alt="movie" />
+                    }
+                    <Typography id="title">{chosenMovie.Title}({chosenMovie.Year})</Typography>
+                    <Button id="button" disabled={disable} size="small" color="primary" onClick={(() => handleClick(chosenMovie))}>
+                      Nominate</Button>
+                  </Card>
 
-            ))}
-          </div>
-        </div>
-        : <div></div>
-        }
-        {(nominates.length > 0) ?
-          <div id="labels">nominates
+                ))}
+              </div>
+            </div>
+            : <div></div>
+          }
+          {(nominates.length > 0) ?
+            <div id="labels">Nominations
             <div id='nominatesList'>
 
-              {nominates.map((nominateOne, idx) => (
-                <Card id='nominateImage' key={idx}>
-                  <CardMedia
-                    component="img"
-                    id="poster"
-                    height="600"
-                    image={nominateOne.Poster}
-                    alt="nominates" />
-                  <Typography id="title">{nominateOne.Title}({nominateOne.Year})</Typography>
-                  <Button id="button" size="small" color="dark" onClick={(() => handleRemove(nominateOne))}>Remove</Button>
-                </Card>
-              ))}
+                {nominates.map((nominateOne, idx) => (
+                  <Card id='nominateImage' key={idx}>
+                    { (nominateOne.Poster === 'N/A') ?
+                      <CardMedia
+                        component="img"
+                        id='poster'
+                        height='600'
+                        image={Camera}
+                        alt="movie" />
+                      :
+                      <CardMedia
+                        component="img"
+                        id='poster'
+                        height='600'
+                        image={nominateOne.Poster}
+                        alt="movie" />
+                    }
+
+                    <Typography id="title">{nominateOne.Title}({nominateOne.Year})</Typography>
+                    <Button id="button" size="small" color="primary" onClick={(() => handleRemove(nominateOne))}>Remove</Button>
+                  </Card>
+                ))}
+              </div>
             </div>
-          </div>
-          : <div></div>
-        }
-      </div>
+            : <div></div>
+          }
+        </div>
 
       }
     </div>
@@ -160,7 +199,7 @@ const useStyles = makeStyles((theme) => ({
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
-    width: '100%',
+    width: '80%',
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
