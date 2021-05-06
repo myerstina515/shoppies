@@ -7,7 +7,7 @@ const Main = () => {
   const classes = useStyles();
   const [search, setSearch] = useState('');
   const [movies, setMovies] = useState([]);
-  const [favorites, setFavorites] = useState([]);
+  const [nominates, setnominates] = useState([]);
 
   const getMovies = async (search) => {
     const url = `http://www.omdbapi.com/?s=${search}&apikey=f87015ef`;
@@ -19,20 +19,20 @@ const Main = () => {
     }
   }
   const handleClick = (chosenMovie) => {
-    if (favorites.length < 5) {
-      let favoritesList = [...favorites, chosenMovie]
-      setFavorites(favoritesList);
-      // saveToLocalStorage(favoritesList);
+    if (nominates.length < 5) {
+      let nominatesList = [...nominates, chosenMovie]
+      setnominates(nominatesList);
+      // saveToLocalStorage(nominatesList);
     }
   }
-  const handleRemove = (favoriteOne) => {
-    const newFavoritesList = favorites.filter(
-      (favorite) => favorite.imdbID !== favoriteOne.imdbID
+  const handleRemove = (nominateOne) => {
+    const newnominatesList = nominates.filter(
+      (nominate) => nominate.imdbID !== nominateOne.imdbID
     );
 
-    setFavorites(newFavoritesList);
-    // saveToLocalStorage(newFavoritesList);
-    console.log(favorites);
+    setnominates(newnominatesList);
+    // saveToLocalStorage(newnominatesList);
+    console.log(nominates);
   };
 
   useEffect(() => {
@@ -40,22 +40,22 @@ const Main = () => {
   }, [search]);
 
   // useEffect(() => {
-  //   const movieFavorites = JSON.parse(
-  //     localStorage.getItem('react-movie-app-Favorites')
+  //   const movienominates = JSON.parse(
+  //     localStorage.getItem('react-movie-app-nominates')
   //   );
-  //   setFavorites(movieFavorites);
+  //   setnominates(movienominates);
   // }, []);
 
   // const saveToLocalStorage = (items) => {
-  //   localStorage.setItem('react-movie-app-Favorites', JSON.stringify(items));
+  //   localStorage.setItem('react-movie-app-nominates', JSON.stringify(items));
   // };
 
-  // console.log(favorites);
-  // let favoritesArray = Array.isArray(favorites);
-  // console.log(Array.isArray(favorites));
+  // console.log(nominates);
+  // let nominatesArray = Array.isArray(nominates);
+  // console.log(Array.isArray(nominates));
   // console.log(Array.isArray(movies));
   return (
-    <div>
+    <div id="main">
       <div className={classes.search}>
         <div className={classes.searchIcon}>
           <SearchIcon />
@@ -72,12 +72,12 @@ const Main = () => {
       </div>
 
       { (movies.length === 0) ? 
-      <div>
+      <Card id="welcomeCard">
         <h1>Welcome to the Shoppies!</h1>
         <p>Nominate your favorite movies, and they could win the Shoppie Award!</p>
-        <p>To get started, search for the title of your favorite movie above!</p>
+        <p>To get started, search for the title of the movie you want to nominate above!</p>
         <p><em>A maximum of 5 movies can be nominated</em></p>
-      </div>
+      </Card>
       :
       <div class='container'>
         { (movies.length > 0) ?
@@ -91,9 +91,9 @@ const Main = () => {
                   height='600'
                   image={chosenMovie.Poster}
                   alt="movie" />
-                <Typography>{chosenMovie.Title}({chosenMovie.Year})</Typography>
+                <Typography id="title">{chosenMovie.Title}({chosenMovie.Year})</Typography>
                 <Button id="button" size="small" color="dark" onClick={(() => handleClick(chosenMovie))}>
-                  Add to Favorites</Button>
+                  Add to nominates</Button>
               </Card>
 
             ))}
@@ -101,19 +101,20 @@ const Main = () => {
         </div>
         : <div></div>
         }
-        {(favorites.length > 0) ?
-          <div id="labels">Favorites
-            <div id='favoritesList'>
+        {(nominates.length > 0) ?
+          <div id="labels">nominates
+            <div id='nominatesList'>
 
-              {favorites.map((favoriteOne, idx) => (
-                <Card id='favoriteImage' key={idx}>
+              {nominates.map((nominateOne, idx) => (
+                <Card id='nominateImage' key={idx}>
                   <CardMedia
                     component="img"
                     id="poster"
                     height="600"
-                    image={favoriteOne.Poster}
-                    alt="favorites" />
-                  <Button id="button" size="small" color="dark" onClick={(() => handleRemove(favoriteOne))}>Remove</Button>
+                    image={nominateOne.Poster}
+                    alt="nominates" />
+                  <Typography id="title">{nominateOne.Title}({nominateOne.Year})</Typography>
+                  <Button id="button" size="small" color="dark" onClick={(() => handleRemove(nominateOne))}>Remove</Button>
                 </Card>
               ))}
             </div>
