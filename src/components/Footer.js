@@ -5,30 +5,32 @@ import {
   faLinkedin,
   faReact
 } from "@fortawesome/free-brands-svg-icons";
+import { AppBar } from '@material-ui/core';
+
 
 const Footer = () => {
   return (
     <>
-      <footer>
-        <hr />
-        <p id="footer">Tina Myers &copy; 2021
-          <a href="mailto:myers.tina515@gmail.com">Contact Me!</a>
+      <AppBar position="fixed" color="primary" id="footer">
+        <p id="footer">Created by Tina Myers
+          <a id="links" href="mailto:myers.tina515@gmail.com">Contact Me!</a>
         </p>
         <div id="social-container">
           <a id="icon" href="https://github.com/myerstina515"
             className="github social">
-            <FontAwesomeIcon icon={faGithub} size="2x" />
+            <FontAwesomeIcon icon={faGithub} color="black" size="2x" />
           </a>
           <a id="icon" href="https://www.linkedin.com/in/tinalmyers/"
             className="Linkedin social">
-            <FontAwesomeIcon icon={faLinkedin} size="2x" />
+            <FontAwesomeIcon icon={faLinkedin} color="black" size="2x" />
           </a>
           <a id="icon" href="https://tina-myers-portfolio.netlify.app/"
             className="portfolio social">
-            <FontAwesomeIcon icon={faReact} size="2x" />
+            <FontAwesomeIcon icon={faReact} size="2x" color="black"/>
           </a>
         </div>
-      </footer>
+        <p></p>
+      </AppBar>
     </>
   )
 }
