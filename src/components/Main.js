@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import './Main.scss';
 import { makeStyles, fade, Card, Typography, CardMedia, Button, InputBase } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import Camera from '../assets/camera.png';
+
 
 const Main = () => {
   const classes = useStyles();
   const [search, setSearch] = useState('');
   const [movies, setMovies] = useState([]);
-  const [favorites, setFavorites] = useState([]);
+  const [nominates, setnominates] = useState([]);
+  const [disable, setDisable] = useState(false);
 
   const getMovies = async (search) => {
     const url = `http://www.omdbapi.com/?s=${search}&apikey=f87015ef`;
@@ -19,20 +22,29 @@ const Main = () => {
     }
   }
   const handleClick = (chosenMovie) => {
-    if (favorites.length < 5) {
-      let favoritesList = [...favorites, chosenMovie]
-      setFavorites(favoritesList);
-      // saveToLocalStorage(favoritesList);
+    console.log(chosenMovie)
+    if (nominates.length === 4) {
+      setDisable(true);
+      let nominatesList = [...nominates, chosenMovie];
+      setnominates(nominatesList);
     }
+    else if (nominates.length < 5) {
+      let nominatesList = [...nominates, chosenMovie];
+      setnominates(nominatesList);
+
+      // saveToLocalStorage(nominatesList);
+    } 
+    
   }
-  const handleRemove = (favoriteOne) => {
-    const newFavoritesList = favorites.filter(
-      (favorite) => favorite.imdbID !== favoriteOne.imdbID
+  const handleRemove = (nominateOne) => {
+    const newnominatesList = nominates.filter(
+      (nominate) => nominate.imdbID !== nominateOne.imdbID
     );
 
-    setFavorites(newFavoritesList);
-    // saveToLocalStorage(newFavoritesList);
-    console.log(favorites);
+    setnominates(newnominatesList);
+    // saveToLocalStorage(newnominatesList);
+    setDisable(false);
+    console.log(nominates);
   };
 
   useEffect(() => {
@@ -40,22 +52,30 @@ const Main = () => {
   }, [search]);
 
   // useEffect(() => {
-  //   const movieFavorites = JSON.parse(
-  //     localStorage.getItem('react-movie-app-Favorites')
+  //   const movienominates = JSON.parse(
+  //     localStorage.getItem('react-movie-app-nominates')
   //   );
-  //   setFavorites(movieFavorites);
+  //   setnominates(movienominates);
   // }, []);
 
   // const saveToLocalStorage = (items) => {
-  //   localStorage.setItem('react-movie-app-Favorites', JSON.stringify(items));
+  //   localStorage.setItem('react-movie-app-nominates', JSON.stringify(items));
   // };
 
-  // console.log(favorites);
-  // let favoritesArray = Array.isArray(favorites);
-  // console.log(Array.isArray(favorites));
+  // console.log(nominates);
+  // let nominatesArray = Array.isArray(nominates);
+  // console.log(Array.isArray(nominates));
   // console.log(Array.isArray(movies));
+
+
+  //TODO: clear search
+  //TODO: disable "add" button once added to nominations (if movie.ID === imdb.ID, have button be disabled)
+  //TODO: show banner when nominations.length === 5
+  //TODO: Results for... search info
+  //TODO: Local storage
+
   return (
-    <div>
+    <div id="main">
       <div className={classes.search}>
         <div className={classes.searchIcon}>
           <SearchIcon />
@@ -71,56 +91,76 @@ const Main = () => {
         />
       </div>
 
-      { (movies.length === 0) ? 
-      <div>
-        <h1>Welcome to the Shoppies!</h1>
-        <p>Nominate your favorite movies, and they could win the Shoppie Award!</p>
-        <p>To get started, search for the title of your favorite movie above!</p>
-        <p><em>A maximum of 5 movies can be nominated</em></p>
-      </div>
-      :
-      <div class='container'>
-        { (movies.length > 0) ?
-        <div id="labels">Movies
+      { (movies.length === 0) ?
+        <Card id="welcomeCard">
+          <h1>Welcome to the Shoppies!</h1>
+          <p>Nominate your favorite movies, and they could win the Shoppie Award!</p>
+          <p>To get started, search for the title of the movie you want to nominate above!</p>
+          <p><em>A maximum of 5 movies can be nominated</em></p>
+        </Card>
+        :
+        <div class='container'>
+          {(movies.length > 0) ?
+            <div id="labels">Movies
           <div id='moviesList'>
-            {movies.map((chosenMovie, idx) => (
-              <Card id='movieImage' key={idx}>
-                <CardMedia
-                  component="img"
-                  id='poster'
-                  height='600'
-                  image={chosenMovie.Poster}
-                  alt="movie" />
-                <Typography>{chosenMovie.Title}({chosenMovie.Year})</Typography>
-                <Button id="button" size="small" color="dark" onClick={(() => handleClick(chosenMovie))}>
-                  Add to Favorites</Button>
-              </Card>
+                {movies.map((chosenMovie, idx) => (
+                  <Card id='movieImage' key={idx}>
+                    { (chosenMovie.Poster === 'N/A') ?
+                      <CardMedia
+                        component="img"
+                        id='poster'
+                        height='600'
+                        image={Camera}
+                        alt="movie" />
+                      :
+                      <CardMedia
+                        component="img"
+                        id='poster'
+                        height='600'
+                        image={chosenMovie.Poster}
+                        alt="movie" />
+                    }
+                    <Typography id="title">{chosenMovie.Title}({chosenMovie.Year})</Typography>
+                    <Button id="button" disabled={disable} size="small" color="primary" onClick={(() => handleClick(chosenMovie))}>
+                      Nominate</Button>
+                  </Card>
 
-            ))}
-          </div>
-        </div>
-        : <div></div>
-        }
-        {(favorites.length > 0) ?
-          <div id="labels">Favorites
-            <div id='favoritesList'>
-
-              {favorites.map((favoriteOne, idx) => (
-                <Card id='favoriteImage' key={idx}>
-                  <CardMedia
-                    component="img"
-                    id="poster"
-                    height="600"
-                    image={favoriteOne.Poster}
-                    alt="favorites" />
-                  <Button id="button" size="small" color="dark" onClick={(() => handleRemove(favoriteOne))}>Remove</Button>
-                </Card>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-          : <div></div>
-        }
-      </div>
+            : <div></div>
+          }
+          {(nominates.length > 0) ?
+            <div id="labels">Nominations
+            <div id='nominatesList'>
+
+                {nominates.map((nominateOne, idx) => (
+                  <Card id='nominateImage' key={idx}>
+                    { (nominateOne.Poster === 'N/A') ?
+                      <CardMedia
+                        component="img"
+                        id='poster'
+                        height='600'
+                        image={Camera}
+                        alt="movie" />
+                      :
+                      <CardMedia
+                        component="img"
+                        id='poster'
+                        height='600'
+                        image={nominateOne.Poster}
+                        alt="movie" />
+                    }
+
+                    <Typography id="title">{nominateOne.Title}({nominateOne.Year})</Typography>
+                    <Button id="button" size="small" color="primary" onClick={(() => handleRemove(nominateOne))}>Remove</Button>
+                  </Card>
+                ))}
+              </div>
+            </div>
+            : <div></div>
+          }
+        </div>
 
       }
     </div>
@@ -159,7 +199,7 @@ const useStyles = makeStyles((theme) => ({
     // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
-    width: '100%',
+    width: '80%',
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },

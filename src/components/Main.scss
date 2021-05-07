@@ -1,12 +1,12 @@
-body{
-  background-color: grey;
-}
+// border for search results and nominations
+// check colors for accessibility
 
+body{
+  background-color: rgb(173, 173, 173);
+}
 .container{
   display: grid;
   grid-template-columns: 60% 40%;
-  // display: flexbox;
-  // flex-wrap: wrap;
 }
 #moviesList{
   display: grid;
@@ -14,20 +14,53 @@ body{
 }
 #movieImage{
   margin: 10px auto 10px auto;
-  // width: 75%;
-  // height: 75%;
-
+  #title{
+    width: 20vw;
+    height: 10vh;
+    margin: auto;
+  }
 }
 #poster{
-  height: 75%;
-  width: 75%;
+  height: 45vh;
+  width: 15vw;
   margin: 10px auto 10px auto;
 }
-#favoriteImage{
-  height: 40%;
-  width: 40%;
+#nominateImage{
+  height: 45%;
+  width: 45%;
   margin: 10px auto 10px auto;
+  #title{
+    width: 15vw;
+    height: 8vh;
+    margin: auto;
+    font-size: 60%;
+  }
 }
 #header{
+  margin-bottom: 5vh;
+}
+#footer{
+  top: auto;
+  bottom: 0;
+}
+#links{
+  color: white;
+  padding-left: 10px;
+}
+#icon{
+  padding: 5px;
   margin-bottom: 10px;
+}
+#labels{
+  margin-top: 10px;
+  font-size: x-large;
+}
+#main{
+  margin-bottom: 20vh;
+}
+
+#welcomeCard{
+  width: 50%;
+  margin: 3vh auto 0 auto;
+  border: 3px outset grey;
 }
