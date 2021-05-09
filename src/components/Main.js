@@ -58,15 +58,9 @@ const Main = () => {
     setDisable(false);
     console.log(nominates);
   };
-
   useEffect(() => {
     getMovies(search);
   }, [search]);
-
-
-  //TODO: clear search
-  //TODO: show banner when nominations.length === 5
-
 
   console.log(movies);
   return (
@@ -116,14 +110,16 @@ const Main = () => {
                           alt="movie" />
                       }
                       <Typography id="title">{chosenMovie.Title} ({chosenMovie.Year})</Typography>
-                      {(chosenMovie.nominated === true) ?
+                      {(chosenMovie.nominated === true || movies.nominated === true) ?
                         <Button
+                        variant="contained"
                           id="button"
                           disabled={true}
                           size="small" color="primary" onClick={(() => handleClick(chosenMovie, idx))}>
                           Nominate</Button>
                         :
                         <Button
+                        variant="contained"
                           id="button"
                           disabled={disable}
                           size="small" color="primary" onClick={(() => handleClick(chosenMovie, idx))}>
@@ -165,7 +161,7 @@ const Main = () => {
                         alt="movie" />
                     }
                     <Typography id="title">{nominateOne.Title}({nominateOne.Year})</Typography>
-                    <Button id="button" size="small" color="primary" onClick={(() => handleRemove(nominateOne))}>Remove</Button>
+                    <Button variant="contained"id="button" size="small" color="primary" onClick={(() => handleRemove(nominateOne))}>Remove</Button>
                   </Card>
                 ))}
               </div>
