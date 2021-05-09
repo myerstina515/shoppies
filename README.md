@@ -16,23 +16,18 @@ Search for your favorite movie and nominate them for the coveted "Shoppie" award
 
 ![Image](src/Assets/shoppies.gif)
 
-**Features included**
+### Features included
 
 - Search by movie title
-- Nominated 5 choices
-- Quick clear search
+- Nominate 5 choices
 - Remove one or more nominations
 - See nominations
 - Error Handling
 - Alert when nominations are complete
+- Nominations are saved locally if you navigate away from the page
+- Upon return to the page, nominations show up automatically
 
-
-
-**Saved Nomination List**
-
-**Will save locally if you navigate away from the page**
-
-Technologies 💻
+### Technologies Used
 
 - React
 - SASS/SCSS
@@ -40,35 +35,25 @@ Technologies 💻
 - Bootstrap
 - Local Storage
 - [OMDB API](http://www.omdbapi.com/)
+- Font Awesome contact links
 
-### Developer Setup 🔧
+### Developer Setup
 
 Clone Repo
+```git clone (repo)```
 
-```
-npm i
-```
+```npm i```
 
 Run localhost
 
-```
-npm start
-```
+```npm start```
 
+Will run on localhost:3000
 
 ### Connect with me!
 
-[Portfolio](https://stacys-portfolio.netlify.app/) 👩🏼‍💻
+[Portfolio](https://stacys-portfolio.netlify.app/)
 
-[Email](myers.tina515@gmail.com) 📥
+[Email](myers.tina515@gmail.com)
 
-[LinkedIn](https://www.linkedin.com/in/tinalmyers/) 👔
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
+[LinkedIn](https://www.linkedin.com/in/tinalmyers/)
