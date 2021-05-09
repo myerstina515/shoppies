@@ -6,34 +6,50 @@ body{
 }
 .container{
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: 60% 35%;
 }
 #moviesList{
-  display: grid;
-  grid-template-columns: 45% 45%;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
 }
 #movieImage{
-  margin: 10px auto 10px auto;
+  margin: 10px;
+  width: 18vw;
   #title{
-    width: 20vw;
+    width: 80%;
     height: 10vh;
     margin: auto;
   }
+  #poster{
+    height: 45vh;
+    width: 15vw;
+    margin: 10px auto 10px auto;
+  }
 }
-#poster{
-  height: 45vh;
-  width: 15vw;
-  margin: 10px auto 10px auto;
+#nominatesList{
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: 4px outset rgb(219, 218, 218);
+  margin: auto;
+  background-color: lightgrey
 }
 #nominateImage{
-  height: 45%;
-  width: 45%;
+  height: 30vh;
+  width: 12vw;
   margin: 10px auto 10px auto;
   #title{
-    width: 15vw;
-    height: 8vh;
+    width: 10vw;
+    height: 6.5vh;
     margin: auto;
     font-size: 60%;
+  }
+  #poster{
+    height: 18vh;
+    width: 7vw;
+    margin: 10px auto 10px auto;
   }
 }
 #header{
@@ -52,7 +68,7 @@ body{
   margin-bottom: 10px;
 }
 #labels{
-  margin-top: 10px;
+  margin-top: 20px;
   font-size: x-large;
 }
 #main{
@@ -63,4 +79,11 @@ body{
   width: 50%;
   margin: 3vh auto 0 auto;
   border: 3px outset grey;
+}
+#alert{
+  margin: 10px;
+  border: 2px darkgreen solid;
+  background-color: lightgreen;
+  color: black;
+  padding: 5px;
 }
