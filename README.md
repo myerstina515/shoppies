@@ -14,7 +14,7 @@ Search for your favorite movie and nominate them for the coveted "Shoppie" award
   <a href="https://the-shoppie.netlify.app/">Click here to check out the app 🔗</a>
 </h3>
 
-![Image](src/Assets/shoppies.gif)
+![Image](src/assets/shoppies.jpg)
 
 ### Features included
 
