@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Main.scss';
 import { makeStyles, fade, Card, Typography, CardMedia, Button, InputBase } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import Alert from 'react-bootstrap/Alert';
 import Camera from '../assets/camera.png';
 
 
@@ -9,8 +10,14 @@ const Main = () => {
   const classes = useStyles();
   const [search, setSearch] = useState('');
   const [movies, setMovies] = useState([]);
-  const [nominates, setnominates] = useState([]);
   const [disable, setDisable] = useState(false);
+  const [nominates, setnominates] = useState(
+    localStorage.getItem('nominations') ?
+      JSON.parse(localStorage.getItem('nominations'))
+      :
+      [])
+  localStorage.setItem('nominations', JSON.stringify(nominates));
+
 
   const getMovies = async (search) => {
     const url = `http://www.omdbapi.com/?s=${search}&apikey=f87015ef`;
@@ -18,62 +25,44 @@ const Main = () => {
     const responseJson = await response.json();
 
     if (responseJson.Search) {
-      setMovies(responseJson.Search);
+      await setMovies(responseJson.Search);
     }
   }
-  const handleClick = (chosenMovie) => {
-    console.log(chosenMovie)
+  const handleClick = (chosenMovie, idx) => {
+    console.log(chosenMovie, idx)
+    for (let i = 0; i < movies.length; i++) {
+      movies.nominated = false;
+    }
     if (nominates.length === 4) {
       setDisable(true);
+      chosenMovie.nominated = true;
       let nominatesList = [...nominates, chosenMovie];
       setnominates(nominatesList);
+      console.log(nominatesList)
     }
     else if (nominates.length < 5) {
+      chosenMovie.nominated = true;
       let nominatesList = [...nominates, chosenMovie];
       setnominates(nominatesList);
-
-      // saveToLocalStorage(nominatesList);
-    } 
-    
+      localStorage.setItem('nominations', JSON.stringify(nominates));
+      console.log(nominatesList)
+    }
   }
   const handleRemove = (nominateOne) => {
     const newnominatesList = nominates.filter(
       (nominate) => nominate.imdbID !== nominateOne.imdbID
     );
-
+    nominateOne.nominated = false;
     setnominates(newnominatesList);
-    // saveToLocalStorage(newnominatesList);
+    localStorage.setItem('nominations', JSON.stringify(nominates))
     setDisable(false);
     console.log(nominates);
   };
-
   useEffect(() => {
     getMovies(search);
   }, [search]);
 
-  // useEffect(() => {
-  //   const movienominates = JSON.parse(
-  //     localStorage.getItem('react-movie-app-nominates')
-  //   );
-  //   setnominates(movienominates);
-  // }, []);
-
-  // const saveToLocalStorage = (items) => {
-  //   localStorage.setItem('react-movie-app-nominates', JSON.stringify(items));
-  // };
-
-  // console.log(nominates);
-  // let nominatesArray = Array.isArray(nominates);
-  // console.log(Array.isArray(nominates));
-  // console.log(Array.isArray(movies));
-
-
-  //TODO: clear search
-  //TODO: disable "add" button once added to nominations (if movie.ID === imdb.ID, have button be disabled)
-  //TODO: show banner when nominations.length === 5
-  //TODO: Results for... search info
-  //TODO: Local storage
-
+  console.log(movies);
   return (
     <div id="main">
       <div className={classes.search}>
@@ -90,8 +79,7 @@ const Main = () => {
           inputProps={{ 'aria-label': 'search' }}
         />
       </div>
-
-      { (movies.length === 0) ?
+      { (movies.length === 0) && (nominates.length === 0) ?
         <Card id="welcomeCard">
           <h1>Welcome to the Shoppies!</h1>
           <p>Nominate your favorite movies, and they could win the Shoppie Award!</p>
@@ -101,39 +89,60 @@ const Main = () => {
         :
         <div class='container'>
           {(movies.length > 0) ?
-            <div id="labels">Movies
-          <div id='moviesList'>
+            <div id="labels">Results for {search}
+              <div id='moviesList'>
                 {movies.map((chosenMovie, idx) => (
-                  <Card id='movieImage' key={idx}>
-                    { (chosenMovie.Poster === 'N/A') ?
-                      <CardMedia
-                        component="img"
-                        id='poster'
-                        height='600'
-                        image={Camera}
-                        alt="movie" />
-                      :
-                      <CardMedia
-                        component="img"
-                        id='poster'
-                        height='600'
-                        image={chosenMovie.Poster}
-                        alt="movie" />
-                    }
-                    <Typography id="title">{chosenMovie.Title}({chosenMovie.Year})</Typography>
-                    <Button id="button" disabled={disable} size="small" color="primary" onClick={(() => handleClick(chosenMovie))}>
-                      Nominate</Button>
-                  </Card>
-
+                  <div key={idx}>
+                    <Card id='movieImage' >
+                      {(chosenMovie.Poster === 'N/A') ?
+                        <CardMedia
+                          component="img"
+                          id='poster'
+                          height='600'
+                          image={Camera}
+                          alt="movie" />
+                        :
+                        <CardMedia
+                          component="img"
+                          id='poster'
+                          height='600'
+                          image={chosenMovie.Poster}
+                          alt="movie" />
+                      }
+                      <Typography id="title">{chosenMovie.Title} ({chosenMovie.Year})</Typography>
+                      {(chosenMovie.nominated === true || movies.nominated === true) ?
+                        <Button
+                        variant="contained"
+                          id="button"
+                          disabled={true}
+                          size="small" color="primary" onClick={(() => handleClick(chosenMovie, idx))}>
+                          Nominate</Button>
+                        :
+                        <Button
+                        variant="contained"
+                          id="button"
+                          disabled={disable}
+                          size="small" color="primary" onClick={(() => handleClick(chosenMovie, idx))}>
+                          Nominate</Button>
+                      }
+                    </Card>
+                  </div>
                 ))}
               </div>
             </div>
             : <div></div>
           }
           {(nominates.length > 0) ?
-            <div id="labels">Nominations
-            <div id='nominatesList'>
-
+            <div id="labels">Nominations ({nominates.length}/5)
+            {nominates.length === 5 ?
+                <Alert id='alert' variant='success'>
+                  You have reached your limit of nominations! To change your nominations, please remove an item to add a different one!
+                </Alert>
+                :
+                <Alert variant='light'>
+                </Alert>
+              }
+              <div id='nominatesList'>
                 {nominates.map((nominateOne, idx) => (
                   <Card id='nominateImage' key={idx}>
                     { (nominateOne.Poster === 'N/A') ?
@@ -151,9 +160,8 @@ const Main = () => {
                         image={nominateOne.Poster}
                         alt="movie" />
                     }
-
                     <Typography id="title">{nominateOne.Title}({nominateOne.Year})</Typography>
-                    <Button id="button" size="small" color="primary" onClick={(() => handleRemove(nominateOne))}>Remove</Button>
+                    <Button variant="contained"id="button" size="small" color="primary" onClick={(() => handleRemove(nominateOne))}>Remove</Button>
                   </Card>
                 ))}
               </div>
@@ -161,7 +169,6 @@ const Main = () => {
             : <div></div>
           }
         </div>
-
       }
     </div>
   )
