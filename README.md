@@ -1,17 +1,15 @@
+![image](src/assets/coverPhoto.PNG)
+
 <h1 align="center">
 The Shoppies Movie Store
 </h1>
-<h3 align="center">
-By Tina Myers
-</h3>
-<h3 align="center">
 
-Search for your favorite movie and nominate them for the coveted "Shoppie" award!
+<p align="center">Search for your favorite movie and nominate them for the coveted "Shoppie" award!</p>
 
 </h3>
 <h3 align="center">
 <p>Deployed On Netlify</p>
-  <a href="https://the-shoppie.netlify.app/">Click here to check out the app 🔗</a>
+<a href="https://tinamyers-shoppies.herokuapp.com/">Click here to check out the app 🔗</a>
 </h3>
 
 ![Image](src/assets/shoppies.jpg)
@@ -39,20 +37,19 @@ Search for your favorite movie and nominate them for the coveted "Shoppie" award
 
 ### Developer Setup
 
-Clone Repo
-```git clone (repo)```
+Clone Repo:
+
+```git clone {repo link}```
 
 ```npm i```
 
-Run localhost
+Run on localhost:3000
 
 ```npm start```
 
-Will run on localhost:3000
-
 ### Connect with me!
 
-[Portfolio](https://stacys-portfolio.netlify.app/)
+[Portfolio](https://tina-myers-portfolio.netlify.app/)
 
 [Email](myers.tina515@gmail.com)
 
