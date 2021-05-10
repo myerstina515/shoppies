@@ -87,7 +87,7 @@ const Main = () => {
           <p><em>A maximum of 5 movies can be nominated</em></p>
         </Card>
         :
-        <div class='container'>
+        <div id='container'>
           {(movies.length > 0) ?
             <div id="labels">Results for {search}
               <div id='moviesList'>
