@@ -51,6 +51,6 @@ Run on localhost:3000
 
 [Portfolio](https://tina-myers-portfolio.netlify.app/)
 
-[Email](myers.tina515@gmail.com)
+[Email](mailto:myers.tina515@gmail.com)
 
 [LinkedIn](https://www.linkedin.com/in/tinalmyers/)
